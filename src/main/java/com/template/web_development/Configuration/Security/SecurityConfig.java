@@ -3,6 +3,7 @@ package com.template.web_development.Configuration.Security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,15 +40,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                         .requestMatchers("/error","/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
-                        .requestMatchers("/api/user/login",
-                                "/api/user/login-otp",
-                                "/api/user/register",
-                                "/api/user/register-otp")
-                        .permitAll()
-                        .requestMatchers("/api/user/label")
-                        .hasRole("Some role")
+                        .requestMatchers("api/users") //update api
+                        .hasRole("ADMIN")
                         .requestMatchers("/api/news/**")
-                        .hasAnyRole("Some role", "Some role")
+                        .hasAnyRole("ADMIN", "STAFF")
                         .anyRequest().authenticated())
                 .exceptionHandling()
                 .accessDeniedHandler(new AppAccessDeniedHandler())
